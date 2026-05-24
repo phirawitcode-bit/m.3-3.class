@@ -422,6 +422,16 @@
             font-weight: 500;
             animation: pulseHint 2s infinite;
         }
+
+        .scroll-hinte                       {
+            text-align: center;               
+            font-size: 0.95rem;                
+            margin-bottom: 40px;              
+            color: var(--text-dark);          
+            font-weight: 600;
+            position: relative;
+            
+        }
         @keyframes pulseHint {
             0% { opacity: 0.6; transform: translateX(-3px); }
             50% { opacity: 1; transform: translateX(3px); }
@@ -810,6 +820,7 @@
         <!-- ปฏิทินสถิติการมาเรียน -->
         <h2 class="section-title">สถิติการมาเรียนประจำสัปดาห์</h2>
         <p class="scroll-hint">👉 เลื่อน ซ้าย-ขวา เพื่อดูสัปดาห์อื่นๆ 👈</p>
+        <p class="scroll-hinte">สามารถกดดูได้ว่าแต่ละวันขาดใครบ้างโดยการกดไปที่วันนั้น ๆ ที่อยากรู้ หากวันนั้นยังมาไม่ถึงจะกดไม่ได้</p>
         
         <div class="calendar-wrapper">
             <div class="calendar-scroll-container" id="scrollContainer">
