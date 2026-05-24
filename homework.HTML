@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>การบ้าน - ม.3/3 รุ่น 46 SMT-R</title>
+    
+    <!-- ฟอนต์ภาษาไทย Kanit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* =========================================
+            โทนสีและพื้นฐาน 
+           ========================================= */
+        :root {
+            --bg: #F4F7F6;            
+            --surface: #FFFFFF;       
+            --primary: #6A9C78;       
+            --primary-light: #E8F0EA; 
+            --text-dark: #2D3748;     
+            --text-muted: #718096;    
+            --border: #E2E8F0;        
+        }
+
+        * { 
+            box-sizing: border-box;   
+            margin: 0;                
+            padding: 0;               
+        }
+        
+        body {
+            font-family: 'Kanit', sans-serif; 
+            background-color: var(--bg);      
+            color: var(--text-dark);          
+            line-height: 1.6;                 
+        }
+
+        /* =========================================
+           แถบนำทาง (Nav)
+           ========================================= */
+        nav {
+            background-color: var(--surface); 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03); 
+            position: sticky;                 
+            top: 0;                           
+            z-index: 100;                     
+        }
+        .nav-box {
+            max-width: 1200px;                
+            margin: 0 auto;                   
+            padding: 0 20px;                  
+            display: flex;                    
+            justify-content: space-between;   
+            align-items: center;              
+            height: 70px;                     
+        }
+        .logo { 
+            font-size: 1.5rem;                
+            font-weight: 600;                 
+            color: var(--primary);            
+            text-decoration: none;            
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .menus { 
+            display: flex;                    
+            gap: 5px;                         
+        }
+        .nav-link {
+            text-decoration: none;            
+            color: var(--text-muted);         
+            padding: 8px 16px;                
+            border-radius: 8px;               
+            transition: 0.3s;                 
+            font-weight: 500;                 
+        }
+        .nav-link:hover { 
+            background-color: #F8FAFC;        
+            color: var(--primary);            
+        }
+        .nav-link.active { 
+            background-color: var(--primary-light); 
+            color: var(--primary);                  
+        }
+
+        /* =========================================
+           เนื้อหาหลักหน้าการบ้าน
+           ========================================= */
+        main { 
+            max-width: 1000px; 
+            margin: 0 auto;                   
+            padding: 40px 20px 80px 20px;        
+        }
+
+        /* ส่วนหัว (Header) */
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .page-header h1 {
+            font-size: 2.5rem;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+        }
+        .page-header p {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+        }
+
+        /*  โครงสร้างรายการการบ้าน */
+        .hw-section {
+            margin-bottom: 50px;
+        }
+        .hw-section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background-color: var(--primary-light);
+            padding: 10px 20px;
+            border-radius: 12px;
+            color: var(--primary);
+        }
+
+        .hw-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px; 
+        }
+
+        /* 🌟 การ์ดการบ้าน (Homework Card) */
+        .hw-card {
+            background-color: var(--surface);
+            border-radius: 16px;
+            padding: 25px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+            border: 1px solid var(--border);
+            border-left: 6px solid var(--primary); 
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .hw-card:hover {
+            transform: translateX(5px); 
+            box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+        }
+
+        /* =========================================
+            สีประจำวิชา (1 สี = 1 วิชา) 
+           ========================================= */
+        
+        /* 1. คณิตศาสตร์ (สีฟ้า) */
+        .subj-math { border-left-color: #3B82F6; }
+        .tag-math { background-color: #DBEAFE; color: #1D4ED8; }
+        
+        /* 2. คณิตศาสตร์เพิ่มเติม (สีฟ้าคราม/Cyan) */
+        .subj-addmath { border-left-color: #06B6D4; }
+        .tag-addmath { background-color: #CFFAFE; color: #0E7490; }
+
+        /* 3. ภาษาไทย (สีชมพู) */
+        .subj-thai { border-left-color: #EC4899; }
+        .tag-thai { background-color: #FCE7F3; color: #BE185D; }
+        
+        /* 4. วิทยาศาสตร์ (สีเหลือง/ส้มอ่อน) */
+        .subj-sci { border-left-color: #F59E0B; }
+        .tag-sci { background-color: #FEF3C7; color: #B45309; }
+
+        /* 5. วิทยาศาสตร์เพิ่มเติม (สีส้มเข้ม) */
+        .subj-addsci { border-left-color: #EA580C; }
+        .tag-addsci { background-color: #FFEDD5; color: #9A3412; }
+        
+        /* 6. ภาษาอังกฤษ (สีแดง) */
+        .subj-eng { border-left-color: #EF4444; }
+        .tag-eng { background-color: #FEE2E2; color: #B91C1C; }
+        
+        /* 7. สังคมศึกษา (สีเขียว) */
+        .subj-soc { border-left-color: #10B981; }
+        .tag-soc { background-color: #D1FAE5; color: #047857; }
+
+        /* 8. ประวัติศาสตร์ (สีน้ำตาลทอง) */
+        .subj-hist { border-left-color: #A16207; }
+        .tag-hist { background-color: #FEF3C7; color: #713F12; }
+        
+        /* 9. ศิลปะ (สีม่วง) */
+        .subj-art { border-left-color: #8B5CF6; }
+        .tag-art { background-color: #EDE9FE; color: #5B21B6; }
+
+        /* 10. โรบอท (สีเทาน้ำเงิน / Slate) */
+        .subj-robot { border-left-color: #64748B; }
+        .tag-robot { background-color: #F1F5F9; color: #334155; }
+
+        /* 11. วิชาอื่นๆทั่วไป (สีเทา) */
+        .subj-other { border-left-color: #9CA3AF; }
+        .tag-other { background-color: #F3F4F6; color: #4B5563; }
+
+        /* ข้อมูลฝั่งซ้าย */
+        .hw-info {
+            flex: 1;
+        }
+        .hw-subject-tag {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        .hw-desc {
+            font-size: 1.1rem;
+            color: var(--text-dark);
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+        .hw-meta {
+            display: flex;
+            gap: 20px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+        .hw-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .hw-meta-item svg {
+            width: 16px; height: 16px;
+        }
+
+        /* ข้อมูลฝั่งขวา (กำหนดส่ง) */
+        .hw-deadline {
+            text-align: right;
+            min-width: 120px;
+            background-color: var(--bg);
+            padding: 10px 15px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+        .hw-deadline small {
+            display: block;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 2px;
+        }
+        .hw-deadline strong {
+            font-size: 1.05rem;
+            color: var(--text-dark);
+        }
+
+        /* =========================================
+           ฟุตเตอร์ (Footer) น้ำเงินเข้มอมดำ
+           ========================================= */
+        footer {
+            text-align: center;               
+            padding: 50px 20px;               
+            background-color: #0B1120;        
+            color: #F8FAFC;                   
+            position: relative; 
+            z-index: 10; 
+            box-shadow: 0 -10px 25px rgba(0, 0, 0, 0.4); 
+            margin-top: 50px;
+        }
+        .footer-box { 
+            max-width: 1200px;                
+            margin: 0 auto;                   
+            display: flex;                    
+            flex-direction: column; 
+            align-items: center;              
+            gap: 15px;                        
+        }
+        .ig-btn {
+            display: inline-flex;             
+            align-items: center;              
+            gap: 10px;                         
+            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); 
+            color: white;                     
+            padding: 12px 24px;               
+            border-radius: 30px;              
+            text-decoration: none;            
+            font-weight: 500;                 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3); 
+            transition: all 0.3s; 
+        }
+        .ig-btn:hover { 
+            transform: translateY(-3px) scale(1.05);      
+            box-shadow: 0 10px 20px rgba(225, 48, 108, 0.5); 
+        }
+        .ig-btn svg { width: 22px; height: 22px; }
+        .footer-copyright {
+            font-size: 0.85rem;                
+            margin-top: 15px;                 
+            color: #94A3B8;                   
+        }
+
+        /* =========================================
+            มือถือ (Responsive)
+           ========================================= */
+        @media (max-width: 768px) {
+            .hw-card {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+            }
+            .hw-deadline {
+                width: 100%;
+                text-align: left;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+            .hw-deadline small { margin-bottom: 0; }
+        }
+
+        @media (max-width: 480px) {
+            .nav-box { 
+                flex-direction: column;       
+                height: auto; 
+                padding: 15px 20px; 
+                gap: 12px; 
+            }
+            .page-header h1 { font-size: 2rem; }
+            .hw-subject { font-size: 1.1rem; }
+            .hw-meta { flex-direction: column; gap: 5px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-box">
+            <a href="index.html" class="logo">
+                 ม.3/3 รุ่น 46 SMT-R
+            </a>
+            <div class="menus">
+                <a href="index.html" class="nav-link">หน้าแรก</a>
+                <a href="classmates.html" class="nav-link">สมาชิก</a>
+                <a href="homework.html" class="nav-link active">การบ้าน</a>
+                <a href="memories.html" class="nav-link">ความทรงจำ</a>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        
+        <div class="page-header">
+            <h1>กระดานการบ้าน </h1>
+            <p>รวมรายการการบ้านแยกตามรายสัปดาห์ (เฉพาะงานที่สั่งข้ามสัปดาห์)</p>
+        </div>
+
+        <!-- ============================================================
+             สัปดาห์ที่ 1
+             
+        ============================================================= -->
+        <div class="hw-section" id="week-1">
+            <h2 class="hw-section-title">📅 สัปดาห์ที่ 2 (18 - 22 พ.ค. 2569)</h2>
+            <div class="hw-list">
+                
+                <!-- คณิตศาสตร์ (math) -->
+                <div class="hw-card subj-math">
+                    <div class="hw-info">
+                        <span class="hw-subject-tag tag-math">คณิตศาสตร์ ึค23101</span>
+                        <div class="hw-desc">ทำใบงานหน้า 23 - 27 </div>
+                        <div class="hw-meta">
+                            <div class="hw-meta-item">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                                ครู นภดล  
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hw-deadline"><small>กำหนดส่ง</small><strong>[วันจันทร์ ที่ 25/05/69]</strong></div>
+                </div>
+
+                
+
+                
+
+                <!-- วิทยาศาสตร์ (sci) -->
+                <div class="hw-card subj-sci">
+                    <div class="hw-info">
+                        <span class="hw-subject-tag tag-sci">วิทยาศาสตร์ ว23101</span>
+                        <div class="hw-desc">ทำใบงานที่ครูแจกให้ครบทุกหน้า</div>
+                        <div class="hw-meta">
+                            <div class="hw-meta-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>ครู พลพต</div>
+                        </div>
+                    </div>
+                    <div class="hw-deadline"><small>กำหนดส่ง</small><strong>[วันจันทร์ ที่ 25/05/69]</strong></div>
+                </div>
+                
+                
+                <!-- โรบอท (robot) -->
+                <div class="hw-card subj-robot">
+                    <div class="hw-info">
+                        <span class="hw-subject-tag tag-robot">โรบอท ว23209</span>
+                        <div class="hw-desc">ออกแบบใบงานที่ 1.1 เรื่อง พื้นฐานและองค์ประกอบ micro:bit ตามข้อมูลที่ครูแจ้งในGoogle Classroom</div>
+                        <div class="hw-meta">
+                            <div class="hw-meta-item"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>ครู นพรัตน์</div>
+                        </div>
+                    </div>
+                    <div class="hw-deadline"><small>กำหนดส่ง</small><strong>[วันศุกร์ ที่ 29/05/69]</strong></div>
+                </div>
+
+                
+
+            </div>
+        </div>
+
+
+        <!-- ============================================================
+             🌟 สัปดาห์ที่ 2 - 20 (ถูกซ่อนเอาไว้ด้วย style="display: none;")
+             วิธีใช้: เมื่อถึงสัปดาห์นั้นๆ ให้ลบ style="display: none;" ออก แล้วเพิ่มการ์ดงานเข้าไปในช่อง hw-list
+        ============================================================= -->
+
+        
+
+        <!-- สัปดาห์ที่ 3 -->
+        <div class="hw-section" id="week-3" style="display: none;">
+            <h2 class="hw-section-title">📅 สัปดาห์ที่ 3 (ระบุวันที่...)</h2>
+            <div class="hw-list"></div>
+        </div>
+
+        <!-- สัปดาห์ที่ 4 -->
+        <div class="hw-section" id="week-4" style="display: none;">
+            <h2 class="hw-section-title">📅 สัปดาห์ที่ 4 (ระบุวันที่...)</h2>
+            <div class="hw-list"></div>
+        </div>
+
+        <!-- สัปดาห์ที่ 5 -->
+        <div class="hw-section" id="week-5" style="display: none;">
+            <h2 class="hw-section-title">📅 สัปดาห์ที่ 5 (ระบุวันที่...)</h2>
+            <div class="hw-list"></div>
+        </div>
+
+        <!-- สัปดาห์ที่ 6 -->
+        <div class="hw-section" id="week-6" style="display: none;">
+            <h2 class="hw-section-title">📅 สัปดาห์ที่ 6 (ระบุวันที่...)</h2>
+            <div class="hw-list"></div>
+        </div>
+
+        <!-- สัปดาห์ที่ 7 -->
+        <div class="hw-section" id="week-7" style="display: none;">
+            <h2 class="hw-section-title">📅 สัปดาห์ที่ 7 (ระบุวันที่...)</h2>
+            <div class="hw-list"></div>
+        </div>
+
+        <!-- สัปดาห์ที่ 8 -->
+        <div class="hw-section" id="week-8" style="display: none;">
+            <h2 class="hw-section-title">📅 สัปดาห์ที่ 8 (ระบุวันที่...)</h2>
+            <div class="hw-list"></div>
+        </div>
+
+        <!-- สัปดาห์ที่ 9 -->
+        <div class="hw-section" id="week-9" style="display: none;">
+            <h2 class="hw-section-title">📅 สัปดาห์ที่ 9 (ระบุวันที่...)</h2>
+            <div class="hw-list"></div>
+        </div>
+
+        <!-- สัปดาห์ที่ 10 -->
+        <div class="hw-section" id="week-10" style="display: none;">
+            <h2 class="hw-section-title">📅 สัปดาห์ที่ 10 (ระบุวันที่...)</h2>
+            <div class="hw-list"></div>
+        </div>
+
+        <!-- สัปดาห์ที่ 11 -->
+        <div class="hw-section" id="week-11" style="display: none;">
+            <h2 class="hw-section-title">📅 สัปดาห์ที่ 11 (ระบุวันที่...)</h2>
+            <div class="hw-list"></div>
+        </div>
+
+        <!-- สัปดาห์ที่ 12 -->
+        <div class="hw-section" id="week-12" style="display: none;">
+            <h2 class="hw-section-title">📅 สัปดาห์ที่ 12 (ระบุวันที่...)</h2>
+            <div class="hw-list"></div>
+        </div>
+
+        <!-- สัปดาห์ที่ 13 -->
+        <div class="hw-section" id="week-13" style="display: none;">
+            <h2 class="hw-section-title">📅 สัปดาห์ที่ 13 (ระบุวันที่...)</h2>
+            <div class="hw-list"></div>
+        </div>
+
+        <!-- สัปดาห์ที่ 14 -->
+        <div class="hw-section" id="week-14" style="display: none;">
+            <h2 class="hw-section-title">📅 สัปดาห์ที่ 14 (ระบุวันที่...)</h2>
+            <div class="hw-list"></div>
+        </div>
+
+        <!-- สัปดาห์ที่ 15 -->
+        <div class="hw-section" id="week-15" style="display: none;">
+            <h2 class="hw-section-title">📅 สัปดาห์ที่ 15 (ระบุวันที่...)</h2>
+            <div class="hw-list"></div>
+        </div>
+
+        <!-- สัปดาห์ที่ 16 -->
+        <div class="hw-section" id="week-16" style="display: none;">
+            <h2 class="hw-section-title">📅 สัปดาห์ที่ 16 (ระบุวันที่...)</h2>
+            <div class="hw-list"></div>
+        </div>
+
+        <!-- สัปดาห์ที่ 17 -->
+        <div class="hw-section" id="week-17" style="display: none;">
+            <h2 class="hw-section-title">📅 สัปดาห์ที่ 17 (ระบุวันที่...)</h2>
+            <div class="hw-list"></div>
+        </div>
+
+        <!-- สัปดาห์ที่ 18 -->
+        <div class="hw-section" id="week-18" style="display: none;">
+            <h2 class="hw-section-title">📅 สัปดาห์ที่ 18 (ระบุวันที่...)</h2>
+            <div class="hw-list"></div>
+        </div>
+
+        <!-- สัปดาห์ที่ 19 -->
+        <div class="hw-section" id="week-19" style="display: none;">
+            <h2 class="hw-section-title">📅 สัปดาห์ที่ 19 (ระบุวันที่...)</h2>
+            <div class="hw-list"></div>
+        </div>
+
+        <!-- สัปดาห์ที่ 20 -->
+        <div class="hw-section" id="week-20" style="display: none;">
+            <h2 class="hw-section-title">📅 สัปดาห์ที่ 20 (ระบุวันที่...)</h2>
+            <div class="hw-list"></div>
+        </div>
+
+    </main>
+
+    <!-- ส่วนท้ายเว็บไซต์ (Footer) -->
+    <footer>
+        <div class="footer-box">
+            <p>ติดตามความเคลื่อนไหวและภาพกิจกรรมของพวกเราได้ที่</p>
+            <a href="https://www.instagram.com/smt_robot3.3?igsh=MTd0OWd5OTZza3B4bA==" target="_blank" class="ig-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                IG: @smt_robot3.3
+            </a>
+            <p class="footer-copyright">©ม.3/3 รุ่น 46 SMT-R | RST💚💛</p>
+        </div>
+    </footer>
+
+</body>
+</html>

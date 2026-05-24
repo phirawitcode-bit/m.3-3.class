@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ความทรงจำ - ม.3/3 รุ่น 46 SMT-R</title>
+    
+    <!-- ฟอนต์ภาษาไทย Kanit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* =========================================
+            โทนสีและพื้นฐาน 
+           ========================================= */
+        :root {
+            --bg: #F4F7F6;            
+            --surface: #FFFFFF;       
+            --primary: #6A9C78;       
+            --primary-light: #E8F0EA; 
+            --text-dark: #2D3748;     
+            --text-muted: #718096;    
+            --border: #E2E8F0;        
+        }
+
+        * { 
+            box-sizing: border-box;   
+            margin: 0;                
+            padding: 0;               
+        }
+        
+        body {
+            font-family: 'Kanit', sans-serif; 
+            background-color: var(--bg);      
+            color: var(--text-dark);          
+            line-height: 1.6;                 
+        }
+
+        /* =========================================
+           แถบนำทาง (Nav)
+           ========================================= */
+        nav {
+            background-color: var(--surface); 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03); 
+            position: sticky;                 
+            top: 0;                           
+            z-index: 100;                     
+        }
+        .nav-box {
+            max-width: 1200px;                
+            margin: 0 auto;                   
+            padding: 0 20px;                  
+            display: flex;                    
+            justify-content: space-between;   
+            align-items: center;              
+            height: 70px;                     
+        }
+        .logo { 
+            font-size: 1.5rem;                
+            font-weight: 600;                 
+            color: var(--primary);            
+            text-decoration: none;            
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .menus { 
+            display: flex;                    
+            gap: 5px;                         
+        }
+        .nav-link {
+            text-decoration: none;            
+            color: var(--text-muted);         
+            padding: 8px 16px;                
+            border-radius: 8px;               
+            transition: 0.3s;                 
+            font-weight: 500;                 
+        }
+        .nav-link:hover { 
+            background-color: #F8FAFC;        
+            color: var(--primary);            
+        }
+        .nav-link.active { 
+            background-color: var(--primary-light); 
+            color: var(--primary);                  
+        }
+
+        /* =========================================
+           เนื้อหาหลักหน้าความทรงจำ
+           ========================================= */
+        main { 
+            max-width: 1200px; 
+            margin: 0 auto;                   
+            padding: 40px 20px 80px 20px;        
+        }
+
+        /* ส่วนหัว (Header) */
+        .page-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        .page-header h1 {
+            font-size: 2.8rem;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        .page-header p {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /*  โครงสร้างแกลลอรี่ (Grid) */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+        }
+
+        /*  การ์ดความทรงจำ */
+        .memory-card {
+            background-color: var(--surface);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            border: 1px solid var(--border);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        .memory-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(106, 156, 120, 0.1);
+        }
+
+        /* ส่วนรูปภาพ */
+        .memory-img-wrapper {
+            position: relative;
+            width: 100%;
+            height: 240px; 
+            overflow: hidden; 
+            background-color: var(--primary-light);
+        }
+        .memory-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease; 
+        }
+        .memory-card:hover .memory-img {
+            transform: scale(1.08); 
+        }
+
+        /* ป้ายบอกวันที่ */
+        .memory-date-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            color: var(--text-dark);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            z-index: 2;
+        }
+
+        /* ส่วนข้อความข้อมูลกิจกรรม */
+        .memory-info {
+            padding: 25px 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .memory-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+        .memory-desc {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin-bottom: 20px; /* เพิ่มพื้นที่ให้ปุ่ม */
+            flex-grow: 1;
+        }
+        
+        .memory-tags {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto; /* ดันให้อยู่ล่างสุด */
+        }
+        .memory-tag {
+            background-color: var(--primary-light);
+            color: var(--primary);
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        /*  ปุ่มดูรูปเพิ่มเติม */
+        .view-more-btn {
+            background-color: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Kanit', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .view-more-btn:hover {
+            background-color: var(--primary);
+            color: white;
+            box-shadow: 0 4px 10px rgba(106, 156, 120, 0.3);
+        }
+
+        /* =========================================
+            ระบบป๊อปอัป (Modal / Lightbox)
+           ========================================= */
+        .modal-overlay {
+            display: none; /* ซ่อนไว้ก่อน */
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(11, 17, 32, 0.85); /* พื้นหลังสีดำโปร่งแสง */
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .modal-overlay.show {
+            display: flex;
+            opacity: 1;
+            animation: fadeIn 0.3s forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background-color: var(--bg);
+            width: 100%;
+            max-width: 900px;
+            max-height: 90vh;
+            border-radius: 24px;
+            padding: 30px;
+            position: relative;
+            overflow-y: auto; /* ให้เลื่อนดูรูปได้ถ้าเยอะเกินจอ */
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            transform: translateY(20px);
+            animation: slideUp 0.4s ease forwards;
+        }
+        @keyframes slideUp {
+            to { transform: translateY(0); }
+        }
+
+        /* ปุ่มกากบาทปิด */
+        .close-modal-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: var(--border);
+            color: var(--text-dark);
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex; justify-content: center; align-items: center;
+            transition: 0.3s;
+            z-index: 10;
+        }
+        .close-modal-btn:hover {
+            background-color: #EF4444; /* เปลี่ยนเป็นสีแดงตอนเอาเมาส์ชี้ */
+            color: white;
+            transform: rotate(90deg); /* หมุนเท่ๆ */
+        }
+
+        .modal-header {
+            margin-bottom: 20px;
+            padding-right: 50px; /* เว้นที่ให้ปุ่มกากบาท */
+        }
+        .modal-header h2 {
+            font-size: 1.8rem;
+            color: var(--text-dark);
+        }
+        .modal-header p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* กริดรูปภาพในป๊อปอัป */
+        .modal-gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        .modal-gallery-grid img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            transition: 0.3s;
+        }
+        .modal-gallery-grid img:hover {
+            transform: scale(1.03);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        /* =========================================
+           ฟุตเตอร์ (Footer) น้ำเงินเข้มอมดำ
+           ========================================= */
+        footer {
+            text-align: center;               
+            padding: 50px 20px;               
+            background-color: #0B1120;        
+            color: #F8FAFC;                   
+            position: relative; 
+            z-index: 10; 
+            box-shadow: 0 -10px 25px rgba(0, 0, 0, 0.4); 
+            margin-top: 50px;
+        }
+        .footer-box { 
+            max-width: 1200px;                
+            margin: 0 auto;                   
+            display: flex;                    
+            flex-direction: column; 
+            align-items: center;              
+            gap: 15px;                        
+        }
+        .ig-btn {
+            display: inline-flex;             
+            align-items: center;              
+            gap: 10px;                         
+            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); 
+            color: white;                     
+            padding: 12px 24px;               
+            border-radius: 30px;              
+            text-decoration: none;            
+            font-weight: 500;                 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3); 
+            transition: all 0.3s; 
+        }
+        .ig-btn:hover { 
+            transform: translateY(-3px) scale(1.05);      
+            box-shadow: 0 10px 20px rgba(225, 48, 108, 0.5); 
+        }
+        .ig-btn svg { width: 22px; height: 22px; }
+        .footer-copyright {
+            font-size: 0.85rem;                
+            margin-top: 15px;                 
+            color: #94A3B8;                   
+        }
+
+        /* =========================================
+            มือถือ (Responsive)
+           ========================================= */
+        @media (max-width: 768px) {
+            .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+            .modal-content { padding: 20px; width: 95%; }
+            .modal-gallery-grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+        }
+
+        @media (max-width: 480px) {
+            .nav-box { flex-direction: column; height: auto; padding: 15px 20px; gap: 12px; }
+            .page-header h1 { font-size: 2.2rem; }
+            .gallery-grid { grid-template-columns: 1fr; }
+            .memory-img-wrapper { height: 220px; }
+            .modal-gallery-grid { grid-template-columns: 1fr; } /* รูปในป๊อปอัปเรียงแถวเดี่ยว */
+            .modal-header h2 { font-size: 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-box">
+            <a href="index.html" class="logo">
+                 ม.3/3 รุ่น 46 SMT-R
+            </a>
+            <div class="menus">
+                <a href="index.html" class="nav-link">หน้าแรก</a>
+                <a href="classmates.html" class="nav-link">สมาชิก</a> 
+                <a href="homework.html" class="nav-link">การบ้าน</a>
+                <a href="memories.html" class="nav-link active">ความทรงจำ</a>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        
+        <div class="page-header">
+            <h1>แกลลอรี่ความทรงจำ</h1>
+            <p>รวมภาพกิจกรรม รูปถ่ายรวม และเรื่องราวของพวกเราตลอดทั้ง 3 ปีการศึกษา</p>
+        </div>
+
+        <div class="gallery-grid">
+            
+            <!-- การ์ดความทรงจำที่ 1 -->
+            <div class="memory-card">
+                <div class="memory-img-wrapper">
+                    <div class="memory-date-badge">  </div>
+                    <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1505911283671892008/1779107493755.jpg?ex=6a0c58ac&is=6a0b072c&hm=99217d73632b11ced2f662e1b7e707292f9c1b937736ec9268d8f5a1e6b1be3d&" alt="รูปกิจกรรม" class="memory-img">
+                </div>
+                <div class="memory-info">
+                    <h3 class="memory-title">IT Walk Rally</h3>
+                    <p class="memory-desc">ณ พิพิธภัณฑ์วิทยาศาสตร์แห่งชาติ จังหวัด ปทุมธานี</p>
+                    <div class="memory-tags">
+                        <span class="memory-tag">#กิจกรรมนอกสถานที่</span>
+                        <!--  ปุ่มเปิด Modal -->
+                        <button class="view-more-btn" onclick="openModal('modal-1')">
+                            ดูรูปเพิ่ม
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M12 5l7 7-7 7"></path></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- การ์ดความทรงจำที่ 2 -->
+            <div class="memory-card">
+                <div class="memory-img-wrapper">
+                    <div class="memory-date-badge">   </div>
+                    <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1505856714346467329/1739247359955.jpg?ex=6a0c25da&is=6a0ad45a&hm=7017bb6d0f7a6627779dba88ae914f817d342ae2f1ee95f2b2e42ef5c9c6ce7a&" alt="รูปกิจกรรม" class="memory-img">
+                </div>
+                <div class="memory-info">
+                    <h3 class="memory-title">กิจกรรมในห้องเรียน รูปถ่ายรวม</h3>
+                    <p class="memory-desc">รวมภาพกิจกรรมต่าง ๆ ในห้องเรียน รวมถึงรูปถ่ายรวมทุกคน</p>
+                    <div class="memory-tags">
+                        <span class="memory-tag">#กิจกรรมในห้อง</span>
+                        <button class="view-more-btn" onclick="openModal('modal-2')">
+                            ดูรูปเพิ่ม
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M12 5l7 7-7 7"></path></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- การ์ดความทรงจำที่ 3 -->
+            <div class="memory-card">
+                <div class="memory-img-wrapper">
+                    <div class="memory-date-badge">   </div>
+                    <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1505912412048592906/1779107694956.jpg?ex=6a0c59b9&is=6a0b0839&hm=c10b78c6696221dea23037d2724caabe1ab198d47bf608f88c8b882a37c23550&" alt="รูปกิจกรรม" class="memory-img">
+                </div>
+                <div class="memory-info">
+                    <h3 class="memory-title">ทัศนศึกษาที่สวนสัตว์ ม.2</h3>
+                    <p class="memory-desc">ณ สวนสัตว์เปิดเขาเขียว จังหวัดชลบุรี</p>
+                    <div class="memory-tags">
+                        <span class="memory-tag">#ทัศนศึกษา</span>
+                        <button class="view-more-btn" onclick="openModal('modal-3')">
+                            ดูรูปเพิ่ม
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M12 5l7 7-7 7"></path></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- การ์ดความทรงจำที่ 4 -->
+            <div class="memory-card">
+                <div class="memory-img-wrapper">
+                    <div class="memory-date-badge">   </div>
+                    <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1505910215189467288/1779107306364.jpg?ex=6a0c57ad&is=6a0b062d&hm=c482fffb8f818f54a4f3f8475d58a87d22c7def0f8dd41266d76669b044c7753&" alt="รูปกิจกรรม" class="memory-img">
+                </div>
+                <div class="memory-info">
+                    <h3 class="memory-title">วันไหว้ครู ม.1 </h3>
+                    <p class="memory-desc">โรงเรียน</p>
+                    <div class="memory-tags">
+                        <span class="memory-tag">#กิจกรรมโรงเรียน</span>
+                        <button class="view-more-btn" onclick="openModal('modal-4')">
+                            ดูรูปเพิ่ม
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M12 5l7 7-7 7"></path></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- การ์ดความทรงจำที่ 5 -->
+            <div class="memory-card">
+                <div class="memory-img-wrapper">
+                    <div class="memory-date-badge">   </div>
+                    <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1505908873511567470/1779107032230.jpg?ex=6a0cff2d&is=6a0badad&hm=5edb72c6612edb37c7dca3624f340c663abc14d22420d265fbf053581487bd1a&" alt="รูปกิจกรรม" class="memory-img">
+                </div>
+                <div class="memory-info">
+                    <h3 class="memory-title">อบรมโรบอท ม.1</h3>
+                    <p class="memory-desc">โรงเรียน</p>
+                    <div class="memory-tags">
+                        <span class="memory-tag">#กิจกรรมโรงเรียน</span>
+                        <button class="view-more-btn" onclick="openModal('modal-5')">
+                            ดูรูปเพิ่ม
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M12 5l7 7-7 7"></path></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- การ์ดความทรงจำที่ 6 -->
+            <div class="memory-card">
+                <div class="memory-img-wrapper">
+                    <div class="memory-date-badge">   </div>
+                    <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1505856715332124672/1768909448244.jpg?ex=6a0d775a&is=6a0c25da&hm=093514385f414af6b326f25cf4343c2f73eaf2e43f479751c198a71978d8dbfe&" alt="รูปกิจกรรม" class="memory-img">
+                </div>
+                <div class="memory-info">
+                    <h3 class="memory-title">ฉลองวันปีใหม่ ม.2</h3>
+                    <p class="memory-desc">โรงเรียน</p>
+                    <div class="memory-tags">
+                        <span class="memory-tag">#กิจกรรมในห้อง</span>
+                        
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- การ์ดความทรงจำที่ 7 -->
+            <div class="memory-card">
+                <div class="memory-img-wrapper">
+                    <div class="memory-date-badge">   </div>
+                    <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1505855634728419449/1779094344112.jpg?ex=6a0d7658&is=6a0c24d8&hm=a937ed140dbb122d44d28211748454b1ae7b0597ee16a3de300bf01fddfdf003&" alt="รูปกิจกรรม" class="memory-img">
+                </div>
+                <div class="memory-info">
+                    <h3 class="memory-title">ทัศนศึกษา ม.1</h3>
+                    <p class="memory-desc">ณ มหาวิทยาลัยบูรพา จังหวัดชลบุรี</p>
+                    <div class="memory-tags">
+                        <span class="memory-tag">#ทัศนศึกษา</span>
+                        <button class="view-more-btn" onclick="openModal('modal-7')">
+                            ดูรูปเพิ่ม
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M12 5l7 7-7 7"></path></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- การ์ดความทรงจำที่ 8 -->
+            <div class="memory-card">
+                <div class="memory-img-wrapper">
+                    <div class="memory-date-badge">   </div>
+                    <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1499422059007316128/FB_IMG_1741367606956.jpg?ex=6a0d20dc&is=6a0bcf5c&hm=3d40986449cf78cc2ffac42e71d68be09f178b7ac1d6b002e5335f95ee975cf9&" alt="รูปกิจกรรม" class="memory-img">
+                </div>
+                <div class="memory-info">
+                    <h3 class="memory-title">เข้าค่าย SMT ม.1</h3>
+                    <p class="memory-desc"></p>
+                    <div class="memory-tags">
+                        <span class="memory-tag">#กิจกรรมนอกสถานที่</span>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- =========================================================
+         โซนป๊อปอัป (Modals)
+         ซ่อนอยู่ตรงนี้ จะแสดงเมื่อกดปุ่ม "ดูรูปเพิ่ม" 
+         ========================================================= -->
+
+    <!-- ป๊อปอัปที่ 1 (วันเปิดเทอม) -->
+    <div id="modal-1" class="modal-overlay">
+        <div class="modal-content">
+            <!--  ปุ่มปิด (กากบาท) -->
+            <button class="close-modal-btn" onclick="closeModal('modal-1')">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+            <div class="modal-header">
+                <h2> ภาพเพิ่มเติม: วันเปิดเทอมวันแรก</h2>
+                <p>รวมภาพการเข้าเยี่ยมชม พิพิธภัณฑ์วิทยาศาสตร์แห่งชาติ </p>
+            </div>
+            <div class="modal-gallery-grid">
+                <!-- ใส่ลิงก์รูปภาพเพิ่มเติมตรงนี้ -->
+                <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1505911283671892008/1779107493755.jpg?ex=6a0c58ac&is=6a0b072c&hm=99217d73632b11ced2f662e1b7e707292f9c1b937736ec9268d8f5a1e6b1be3d&" alt="รูป 1">
+                <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1505911281318629506/1779107523531.jpg?ex=6a0c58ab&is=6a0b072b&hm=e4fd8ca84daedac71d6c24f353a77e4701c060fee40278a0f18b897fc739ac61&" alt="รูป 2">
+                <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1505911281725472879/1779107518708.jpg?ex=6a0c58ac&is=6a0b072c&hm=ba9b4c469cd761e07e40a9e089246d97f49c9422cd4ae576fb0197ebbed0dd68&" alt="รูป 3">
+                <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1505911282124066939/1779107507419.jpg?ex=6a0c58ac&is=6a0b072c&hm=48a1e6fb545a2136af9ca2ea09cbb887345796639e8b38570624f9f98f825ea4&" alt="รูป 4">
+                <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1505911282497224785/1779107502582.jpg?ex=6a0c58ac&is=6a0b072c&hm=4818557e0a16e88c2cd25a4cc7e188e6fc21a0f2f32f6ae6262f48a40cc6e477&" alt="รูป 4">
+                <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1505911283260723413/1779107479560.jpg?ex=6a0c58ac&is=6a0b072c&hm=ab394c2b552323aa07da64e070745757c4ea1275dfde2b2bbc48da3368a87210&" alt="รูป 4">
+                <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1505911290240045066/1779107470610.jpg?ex=6a0c58ae&is=6a0b072e&hm=1ae91ed426945e8438a1dbcf4656f1fabafc8fe26cbdbef9c4dda27c9ef6aed1&" alt="รูป 4">
+                
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ป๊อปอัปที่ 2 (กีฬาสี) -->
+    <div id="modal-2" class="modal-overlay">
+        <div class="modal-content">
+            <button class="close-modal-btn" onclick="closeModal('modal-2')">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+            <div class="modal-header">
+                <h2> ภาพเพิ่มเติม: กิจกรรมในห้อง</h2>
+                <p>รวมภาพกิจกรรมในห้องเรียน หรือ รูปถ่ายรวม ตั้งแต่ ม.1 ถึง ม.3</p>
+            </div>
+            <div class="modal-gallery-grid">
+                <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1505856714346467329/1739247359955.jpg?ex=6a0c25da&is=6a0ad45a&hm=7017bb6d0f7a6627779dba88ae914f817d342ae2f1ee95f2b2e42ef5c9c6ce7a&" alt="กีฬา 1">
+                <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1505856714656841786/1739361373622.jpg?ex=6a0c25da&is=6a0ad45a&hm=951085690ebe8ba81352b0d0129c972872381eb5f76e878360b74f710d6b8993&" alt="กีฬา 2">
+                <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1499422059498045440/Screenshot_20250207_205456_jp.naver.line.android.jpg?ex=6a0bcf5c&is=6a0a7ddc&hm=ecbe06b306630669425859dd078b5d5e54bf08167344a1b25237f8b7a8bfd6dc&" alt="กีฬา 3">
+                <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1499422060441636995/20250624_143646.jpg?ex=6a0bcf5d&is=6a0a7ddd&hm=f74b3983b0f49c42a4e2ccd50e7a58208cfdbc750ab3c3fa8a0dd73f8f4d4a81&" alt="กีฬา 3">
+                <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1499423157965029426/20251114_100238.jpg?ex=6a0bd062&is=6a0a7ee2&hm=8527ebd7ee03282c04187498d5e9def9fe55d44bb986bcd557d3ddabc2935960&" alt="กีฬา 3">
+               
+            </div>
+        </div>
+    </div>
+
+    <!-- ป๊อปอัปที่ 3 (จัดบอร์ด) -->
+    <div id="modal-3" class="modal-overlay">
+        <div class="modal-content">
+            <button class="close-modal-btn" onclick="closeModal('modal-3')">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+            <div class="modal-header">
+                <h2>ทัศนศึกษา ที่ สวนสัตว์</h2>
+                <p>รวมภาพการไปทัศนศึกษาตอน ม.2 ของพวกเรา</p>
+            </div>
+            <div class="modal-gallery-grid">
+                <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1505912410773651536/1779107816630.jpg?ex=6a0c59b9&is=6a0b0839&hm=09da2c7cccdd68a8432eb915269a0608fbf263991683a03b5b57d2795dba8f32&" alt="จัดบอร์ด 1">
+                <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1505912411356528670/1779107801523.jpg?ex=6a0c59b9&is=6a0b0839&hm=ee960b5fc6f4d3579c93836547a38f0060f592a065885486b0b3227deea8b539&" alt="จัดบอร์ด 2">
+                <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1505912411696398456/1779107780995.jpg?ex=6a0c59b9&is=6a0b0839&hm=e0eeccf1e554a300d1a2073d75ddd67e025a823159e1370f5aae4b944852eabf&" alt="จัดบอร์ด 2">
+                <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1505856351706812458/1779094511097.jpg?ex=6a0d7703&is=6a0c2583&hm=22633cab148558785a6febb59477909c2dbee2477c598ea7a519b0b222e221b0&" alt="">
+                <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1505912412048592906/1779107694956.jpg?ex=6a0c59b9&is=6a0b0839&hm=c10b78c6696221dea23037d2724caabe1ab198d47bf608f88c8b882a37c23550&" alt="จัดบอร์ด 2">
+            </div>
+        </div>
+    </div>
+
+    <!-- ป๊อปอัปที่ 4 (จัดบอร์ด) -->
+    <div id="modal-4" class="modal-overlay">
+        <div class="modal-content">
+            <button class="close-modal-btn" onclick="closeModal('modal-4')">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+            <div class="modal-header">
+                <h2>วันไหว้ครู</h2>
+                <p>รวมภาพในวันไหว้ครูตอนม.1</p>
+            </div>
+            <div class="modal-gallery-grid">
+                <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1505910215189467288/1779107306364.jpg?ex=6a0c57ad&is=6a0b062d&hm=c482fffb8f818f54a4f3f8475d58a87d22c7def0f8dd41266d76669b044c7753&" alt="จัดบอร์ด 1">
+                <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1505910214573035701/1779107332393.jpg?ex=6a0c57ad&is=6a0b062d&hm=a1cbe0b77b48b2c81b3ef8139e9aabcf3dd1b33f60ad32d2c459e571bd153cf8&" alt="จัดบอร์ด 1">
+                <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1505910214891933827/1779107325168.jpg?ex=6a0c57ad&is=6a0b062d&hm=4bb743b603452b61e33041a31293077876c31be5f477d401cb5f5778aab2fbe4&" alt="จัดบอร์ด 1">
+                <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1505910215600771233/Screenshot_20260518_191548_Facebook.jpg?ex=6a0c57ad&is=6a0b062d&hm=a22fe47ece8a48920396c14d0d2b2e03d8230946659ef58013a9e23c53fc7773&" alt="จัดบอร์ด 1">
+                
+            </div>
+        </div>
+    </div>
+
+    <!-- ป๊อปอัปที5 (จัดบอร์ด) -->
+    <div id="modal-5" class="modal-overlay">
+        <div class="modal-content">
+            <button class="close-modal-btn" onclick="closeModal('modal-5')">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+            <div class="modal-header">
+                <h2>อบรมโรบอท ม.1</h2>
+                <p></p>
+            </div>
+            <div class="modal-gallery-grid">
+                <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1505909495950475304/1779107089142.jpg?ex=6a0cffc2&is=6a0bae42&hm=3b6d2e642d3799e197f8bb30ac1d7a154145cad58952fcbdf36380f61afa28e3&" alt="จั">
+                <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1505908873939259462/1779106999683.jpg?ex=6a0cff2d&is=6a0badad&hm=0ab39d47c6cd126e225253505f82d810d4877dc3a9933008747a59f5e3306310&" alt="">
+                <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1505908873511567470/1779107032230.jpg?ex=6a0cff2d&is=6a0badad&hm=5edb72c6612edb37c7dca3624f340c663abc14d22420d265fbf053581487bd1a&" alt="จัดบอร์ด 1">
+                
+            </div>
+        </div>
+    </div>
+
+    <!-- ป๊อปอัปที7 (จัดบอร์ด) -->
+    <div id="modal-7" class="modal-overlay">
+        <div class="modal-content">
+            <button class="close-modal-btn" onclick="closeModal('modal-7')">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+            <div class="modal-header">
+                <h2>ฉลองวันปีใหม่</h2>
+                <p>รูปภาพ</p>
+            </div>
+            <div class="modal-gallery-grid">
+                <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1505855893600735242/1779094412007.jpg?ex=6a0d7696&is=6a0c2516&hm=c3c62dbcc57cd564bd686bc9f57559c3196acd4dc6e2cd7ddb32de7aaf4b2711&" alt="จั">
+                <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1505855770900561980/1779094385297.jpg?ex=6a0d7679&is=6a0c24f9&hm=e6c9ad3828dcc58c2f063086abc52a8c61814ac4bf99ec618b4014dfc3777b6d&" alt="">
+                <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1505855635466485781/1779094330530.jpg?ex=6a0d7658&is=6a0c24d8&hm=675d196bc0854ce0448728c5a2382e1b35d1b6bb309e8bfa536fda5c0ed42faf&" alt="จัดบอร์ด 1">
+                <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1505855635076419705/1779094338527.jpg?ex=6a0d7658&is=6a0c24d8&hm=64757a6e6eac54383f4b832ad91f2cdf8f36c535295b6e0a36e53453b4f8b534&" alt="จัดบอร์ด 1">
+                <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1505855634728419449/1779094344112.jpg?ex=6a0d7658&is=6a0c24d8&hm=a937ed140dbb122d44d28211748454b1ae7b0597ee16a3de300bf01fddfdf003&" alt="จัดบอร์ด 1">
+                
+            </div>
+        </div>
+    </div>
+
+    <!-- ส่วนท้ายเว็บไซต์ (Footer) -->
+    <footer>
+        <div class="footer-box">
+            <p>ติดตามความเคลื่อนไหวและภาพกิจกรรมของพวกเราได้ที่</p>
+            <a href="https://instagram.com/" target="_blank" class="ig-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                IG: @smt_robot3.3
+            </a>
+            <p class="footer-copyright">©ม.3/3 รุ่น 46 SMT-R | RST💚💛</p>
+        </div>
+    </footer>
+
+    
+    <script>
+        // ฟังก์ชันเปิดป๊อปอัป
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('show');
+            // ป้องกันไม่ให้หน้าเว็บหลักข้างหลังเลื่อนได้ตอนดูรูป
+            document.body.style.overflow = 'hidden'; 
+        }
+
+        // ฟังก์ชันปิดป๊อปอัป (ใช้เมื่อกดปุ่มกากบาท)
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('show');
+            // คืนค่าให้หน้าเว็บเลื่อนได้ตามปกติ
+            document.body.style.overflow = 'auto';
+        }
+
+        // ถ้าคลิกพื้นที่สีดำรอบๆ ป๊อปอัป ให้ทำการปิดป๊อปอัปอัตโนมัติ
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal-overlay')) {
+                event.target.classList.remove('show');
+                document.body.style.overflow = 'auto';
+            }
+        }
+    </script>
+</body>
+</html>

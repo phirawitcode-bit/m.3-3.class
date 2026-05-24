@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เพื่อนร่วมห้อง - ม.3/3 รุ่น 46 SMT-R</title>
+    
+    <!-- ฟอนต์ภาษาไทย Kanit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* =========================================
+            โทนสีและพื้นฐาน
+           ========================================= */
+        :root {
+            --bg: #F4F7F6;            /* กำหนดสีพื้นหลังหลักของหน้าเว็บ (เทาอ่อน) */
+            --surface: #FFFFFF;       /* กำหนดสีพื้นหลังของการ์ดและแถบเมนู (สีขาว) */
+            --primary: #6A9C78;       /* กำหนดสีเขียวหลัก (โทนสบายตา) */
+            --primary-light: #E8F0EA; /* กำหนดสีเขียวอ่อนสำหรับพื้นหลังเวลาชี้เมาส์ */
+            --text-dark: #2D3748;     /* กำหนดสีตัวอักษรหลัก (สีเทาเข้ม) */
+            --text-muted: #718096;    /* กำหนดสีตัวอักษรรอง (สีเทาอ่อน) */
+            --border: #E2E8F0;        /* กำหนดสีเส้นขอบ */
+        }
+
+        * { 
+            box-sizing: border-box;   /* ให้นับเส้นขอบและช่องว่างรวมในความกว้างเสมอ */
+            margin: 0;                /* ลบระยะห่างด้านนอกเริ่มต้น */
+            padding: 0;               /* ลบระยะห่างด้านในเริ่มต้น */
+        }
+        
+        body {
+            font-family: 'Kanit', sans-serif; /* ใช้ฟอนต์ Kanit กับทั้งหน้าเว็บ */
+            background-color: var(--bg);      /* ดึงสีพื้นหลังหลักมาใช้ */
+            color: var(--text-dark);          /* ดึงสีตัวอักษรหลักมาใช้ */
+            line-height: 1.6;                 /* กำหนดความห่างระหว่างบรรทัดให้อ่านง่าย */
+        }
+
+        /* =========================================
+           แถบนำทาง (Nav)
+           ========================================= */
+        nav {
+            background-color: var(--surface); /* ให้แถบเมนูเป็นสีขาว */
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03); /* สร้างเงาบางๆ ด้านล่างแถบเมนู */
+            position: sticky;                 /* ให้เมนูลอยติดขอบจอด้านบนเวลาเลื่อนลง */
+            top: 0;                           /* ติดที่ตำแหน่งบนสุด (0px) */
+            z-index: 100;                     /* ตั้งค่าความสูงของเลเยอร์ไม่ให้ถูกบัง */
+        }
+        .nav-box {
+            max-width: 1200px;                /* จำกัดความกว้างเมนูไม่ให้ยาวเกิน 1200px */
+            margin: 0 auto;                   /* จัดแถบเมนูให้อยู่กึ่งกลางหน้าจอ */
+            padding: 0 20px;                  /* เว้นระยะห่างด้านซ้ายขวา 20px */
+            display: flex;                    /* จัดวางองค์ประกอบในเมนูแนวนอน */
+            justify-content: space-between;   /* ดันโลโก้ไปซ้ายสุด และเมนูไปขวาสุด */
+            align-items: center;              /* จัดทุกอย่างให้อยู่กึ่งกลางแนวตั้ง */
+            height: 70px;                     /* กำหนดความสูงของแถบเมนู */
+        }
+        .logo { 
+            font-size: 1.5rem;                /* ขนาดตัวอักษรโลโก้ */
+            font-weight: 600;                 /* ความหนาของตัวอักษร (หนา) */
+            color: var(--primary);            /* สีโลโก้ (สีเขียวหลัก) */
+            text-decoration: none;            /* เอาเส้นใต้ลิงก์ออก */
+        }
+        .menus { 
+            display: flex;                    /* จัดเรียงปุ่มเมนูแนวนอน */
+            gap: 5px;                         /* ระยะห่างระหว่างปุ่ม 5px */
+        }
+        .nav-link {
+            text-decoration: none;            /* เอาเส้นใต้ลิงก์ออก */
+            color: var(--text-muted);         /* สีตัวอักษรปุ่มปกติ */
+            padding: 8px 16px;                /* ระยะห่างด้านในของปุ่ม (บน-ล่าง 8, ซ้าย-ขวา 16) */
+            border-radius: 8px;               /* ความโค้งมนของปุ่ม */
+            transition: 0.3s;                 /* เอฟเฟกต์การเปลี่ยนสีใช้เวลา 0.3 วินาที */
+            font-weight: 500;                 /* ความหนาตัวอักษรระดับปานกลาง */
+        }
+        .nav-link:hover { 
+            background-color: #F8FAFC;        /* สีพื้นหลังเมื่อเอาเมาส์ไปชี้ */
+            color: var(--primary);            /* เปลี่ยนสีตัวอักษรเป็นสีเขียว */
+        }
+        .nav-link.active { 
+            background-color: var(--primary-light); /* สีพื้นหลังของหน้าที่เปิดอยู่ปัจจุบัน */
+            color: var(--primary);                  /* สีตัวอักษรของหน้าที่เปิดอยู่ปัจจุบัน */
+        }
+
+        /* =========================================
+           เนื้อหาหลัก
+           ========================================= */
+        main { 
+            max-width: 1200px;                /* จำกัดความกว้างเนื้อหาหลัก */
+            margin: 40px auto;                /* จัดกึ่งกลาง ห่างจากด้านบน 40px */
+            padding: 0 20px 80px 20px;        /* เว้นระยะห่างซ้าย ขวา ล่าง */
+        }
+        .header { 
+            text-align: center;               /* จัดตัวอักษรให้อยู่กึ่งกลาง */
+            margin-bottom: 40px;              /* เว้นระยะห่างด้านล่าง 40px ก่อนเริ่มการ์ด */
+        }
+        .header h2 { 
+            font-size: 2rem;                  /* ขนาดหัวข้อ */
+            margin-bottom: 5px;               /* ระยะห่างใต้หัวข้อเล็กน้อย */
+        }
+
+        /* =========================================
+           การ์ดเพื่อน (Grid & Card)
+           ========================================= */
+        .grid-box {
+            display: grid;                    /* ใช้ Grid Layout จัดเรียงการ์ด */
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); /* ปรับจำนวนคอลัมน์อัตโนมัติตามขนาดจอ */
+            gap: 20px;                        /* ระยะห่างระหว่างการ์ดแต่ละใบ 20px */
+        }
+        .card {
+            background-color: var(--surface); /* พื้นหลังการ์ดสีขาว */
+            border-radius: 16px;              /* มุมการ์ดโค้ง 16px */
+            overflow: hidden;                 /* ซ่อนเนื้อหาที่ล้นออกนอกกรอบการ์ด */
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); /* เงาบางๆ ให้การ์ดดูลอยขึ้น */
+            transition: transform 0.3s, box-shadow 0.3s; /* เอฟเฟกต์เคลื่อนไหว 0.3 วินาที */
+            display: flex;                    /* จัดเนื้อหาภายในการ์ดเป็นคอลัมน์ */
+            flex-direction: column;           /* เรียงจากบนลงล่าง */
+        }
+        .card:hover { 
+            transform: translateY(-5px);      /* เมื่อเอาเมาส์ชี้ ให้การ์ดลอยขึ้น 5px */
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);  /* เพิ่มเงาให้เข้มขึ้นเวลาชี้ */
+        }
+
+        /* รูปภาพ */
+        .img-box {
+            position: relative;               /* กำหนดเป็นกรอบอ้างอิงสำหรับข้อความทับรูป */
+            width: 100%;                      /* ความกว้างเต็มกรอบการ์ด */
+            aspect-ratio: 3 / 4;              /* ล็อคสัดส่วนรูปเป็นแนวตั้ง (3:4) */
+            background-color: var(--primary-light); /* สีพื้นหลังตอนรอโหลดรูป */
+            overflow: hidden;                 /* ตัดรูปส่วนที่ล้นออกไป */
+        }
+        .img { 
+            width: 100%;                      /* รูปขยายเต็มความกว้าง */
+            height: 100%;                     /* รูปขยายเต็มความสูง */
+            object-fit: cover;                /* จัดภาพให้เต็มพื้นที่โดยไม่เสียสัดส่วน */
+            object-position: center;          /* โฟกัสรูปที่จุดกึ่งกลางเสมอ */
+        }
+
+        /* ข้อความทับรูป */
+        .info {
+            position: absolute;               /* จัดวางอิสระซ้อนทับไปบนรูป */
+            bottom: 0;                        /* ชิดขอบด้านล่าง */
+            left: 0;                          /* ชิดซ้าย */
+            right: 0;                         /* ชิดขวา */
+            padding: 30px 15px 15px 15px;     /* ระยะห่างของข้อความ */
+            background: linear-gradient(to top, rgba(0,0,0,0.85), rgba(0,0,0,0.4) 60%, transparent); /* ไล่สีดำฟุ้งๆ จากล่างขึ้นบน */
+            color: white;                     /* สีตัวอักษรเป็นสีขาว */
+        }
+        .name { 
+            font-size: 1rem;                  /* ขนาดชื่อ */
+            font-weight: 600;                 /* ความหนาของชื่อ */
+            margin-bottom: 2px;               /* ห่างจากชื่อเล่นด้านล่าง 2px */
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5); /* เพิ่มเงาตัวหนังสือให้อ่านง่ายขึ้น */
+        }
+        .nick-num { 
+            font-size: 0.75rem;               /* ขนาดชื่อเล่นและเลขที่ */
+            font-weight: 300;                 /* ความหนาน้อย */
+            color: #E2E8F0;                   /* สีเทาอ่อนมากๆ */
+        }
+
+        .nick-to {
+            font-size: 0.85rem;               /* ขนาดชื่อเล่นและเลขที่ */
+            font-weight: 400;                 /* ความหนาน้อย */
+            color: #ff0000;  
+        }
+
+        /* ปุ่มโซเชียล */
+        .social { 
+            padding: 12px;                    /* ระยะห่างกรอบโซเชียล */
+            display: flex;                    /* วางปุ่มแนวนอน */
+            justify-content: center;          /* ให้อยู่กึ่งกลาง */
+            gap: 15px;                        /* ห่างกัน 15px */
+        }
+        .s-btn {
+            display: inline-flex;             /* จัดไอคอนและข้อความในปุ่ม */
+            align-items: center;              /* ให้อยู่กึ่งกลางแนวตั้ง */
+            background-color: var(--bg);      /* สีพื้นหลังปุ่มโซเชียล */
+            color: var(--text-muted);         /* สีไอคอนเริ่มต้น */
+            border-radius: 20px;              /* ทำปุ่มให้โค้งมน */
+            text-decoration: none;            /* เอาเส้นใต้ออก */
+            overflow: hidden;                 /* ซ่อนข้อความเวลาปุ่มยังไม่ขยาย */
+            max-width: 32px;                  /* ขนาดกว้างเริ่มต้นเท่ากับความสูง */
+            height: 32px;                     /* ความสูงปุ่ม */
+            transition: max-width 0.4s, background-color 0.3s; /* แอนิเมชันปุ่มยืดออก */
+        }
+        .s-icon { 
+            width: 32px;                      /* ความกว้างกล่องไอคอน */
+            height: 32px;                     /* ความสูงกล่องไอคอน */
+            display: flex;                    /* ใช้ Flexbox */
+            align-items: center;              /* จัดไอคอนกึ่งกลางแนวตั้ง */
+            justify-content: center;          /* จัดไอคอนกึ่งกลางแนวนอน */
+            flex-shrink: 0;                   /* ห้ามกล่องไอคอนหดตัว */
+        }
+        .s-icon svg { 
+            width: 16px;                      /* ขนาดภาพไอคอน SVG */
+            height: 16px; 
+        }
+        .s-name { 
+            font-size: 0.75rem;               /* ขนาดตัวหนังสือชื่อแอป */
+            font-weight: 500;                 /* ความหนาตัวหนังสือ */
+            opacity: 0;                       /* ซ่อนข้อความไว้เริ่มต้น */
+            transition: opacity 0.3s;         /* เอฟเฟกต์ค่อยๆ แสดงข้อความ */
+        }
+
+        .s-btn:hover { 
+            max-width: 120px;                 /* ขยายความกว้างปุ่มเมื่อเอาเมาส์ชี้ */
+        }
+        .s-btn:hover .s-name { 
+            opacity: 1;                       /* แสดงข้อความ */
+            margin-right: 12px;               /* ขยับข้อความออกจากขอบขวา */
+        }
+
+        .fb:hover { background-color: #1877F2; color: white; } /* สี Facebook ตอนชี้ */
+        .fb:hover .s-icon { color: white; }
+        .fb .s-icon { color: #1877F2; }       /* สีโลโก้ Facebook เริ่มต้น */
+
+        .ig:hover { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); color: white; } /* สี IG ตอนชี้ */
+        .ig:hover .s-icon { color: white; }
+        .ig .s-icon { color: #E1306C; }       /* สีโลโก้ IG เริ่มต้น */
+
+        /* =========================================
+           ฟุตเตอร์ (Footer) น้ำเงินเข้ม & มีเงา
+           ========================================= */
+        footer {
+            text-align: center;               /* จัดข้อความให้อยู่กึ่งกลาง */
+            padding: 40px 20px;               /* ระยะขอบด้านใน (บนล่าง 40px ซ้ายขวา 20px) */
+            background-color: #0B1120;        /* สีน้ำเงินเข้มอมดำ (Navy/Blackish blue) */
+            color: #F8FAFC;                   /* สีตัวอักษรขาว/เทาอ่อน */
+            position: relative;               /* เพื่อให้ตั้งค่า z-index ได้ */
+            z-index: 10;                      /* ดันเลเยอร์ขึ้นมาให้สูงกว่าส่วนเนื้อหาหลัก */
+            box-shadow: 0 -10px 25px rgba(0, 0, 0, 0.4); /* สร้างเงาสีดำฟุ้งๆ ทอดขึ้นไปด้านบน (-10px) */
+        }
+        .footer-box { 
+            max-width: 1200px;                /* จำกัดความกว้างเนื้อหาข้างในฟุตเตอร์ */
+            margin: 0 auto;                   /* จัดกึ่งกลางหน้าจอ */
+            display: flex;                    /* จัดเรียงข้อความและปุ่ม */
+            flex-direction: column;           /* เรียงจากบนลงล่าง */
+            align-items: center;              /* ให้อยู่กึ่งกลางตรงกลาง */
+            gap: 10px;                        /* ระยะห่างแต่ละบรรทัด 10px */
+        }
+        .ig-btn {
+            display: inline-flex;             /* จัดไอคอนและตัวอักษรในปุ่มให้อยู่บรรทัดเดียวกัน */
+            align-items: center;              /* ให้ไอคอนและอักษรอยู่กึ่งกลางบรรทัด */
+            gap: 8px;                         /* ระยะห่างระหว่างไอคอนและตัวอักษร */
+            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); /* ไล่สี Instagram */
+            color: white;                     /* ตัวอักษรสีขาว */
+            padding: 10px 20px;               /* ขนาดปุ่มด้านใน */
+            border-radius: 30px;              /* มุมปุ่มโค้งมน */
+            text-decoration: none;            /* เอาเส้นใต้ของลิงก์ออก */
+            font-weight: 500;                 /* ความหนาปุ่มระดับกลาง */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3); /* สร้างเงาปุ่มเล็กน้อย */
+            transition: transform 0.3s, box-shadow 0.3s; /* แอนิเมชันปุ่มกดลง */
+        }
+        .ig-btn:hover { 
+            transform: translateY(-3px);      /* เวลาชี้ให้ปุ่มลอยขึ้นนิดนึง */
+            box-shadow: 0 8px 15px rgba(225, 48, 108, 0.5); /* เงาเข้มขึ้นตามสีชมพูไอจี */
+        }
+        .ig-btn svg { 
+            width: 20px;                      /* กำหนดขนาดไอคอน IG */
+            height: 20px; 
+        }
+        .footer-copyright {
+            font-size: 0.8rem;                /* กำหนดให้ขนาดตัวหนังสือลิขสิทธิ์เล็กลง */
+            margin-top: 15px;                 /* ห่างจากปุ่มด้านบน 15px */
+            color: #cbd5e1;                   /* ใช้สีเทาหม่นๆ ไม่แย่งจุดสนใจ */
+        }
+
+        /* =========================================
+            มือถือ (Responsive)
+           ========================================= */
+        @media (max-width: 480px) {
+            .nav-box { flex-direction: column; height: auto; padding: 10px 20px; gap: 10px; }
+            .grid-box { grid-template-columns: repeat(2, 1fr); gap: 12px; } /* บังคับ 2 คอลัมน์ */
+            .info { padding: 20px 10px 10px 10px; }
+            .name { font-size: 0.85rem; }
+            .nick-num { font-size: 0.65rem; }
+            .social { padding: 8px; gap: 8px; }
+            .s-btn { height: 28px; max-width: 28px; }
+            .s-icon { width: 28px; height: 28px; }
+            .s-icon svg { width: 14px; height: 14px; }
+            .s-btn:hover { max-width: 100px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-box">
+            <a href="index.html" class="logo"> ม.3/3 รุ่น 46 SMT-R</a>
+            <div class="menus">
+                <a href="index.html" class="nav-link">หน้าแรก</a>
+                <a href="classmates.html" class="nav-link active">สมาชิก</a>
+                <a href="homework.html" class="nav-link">การบ้าน</a>
+                <a href="memories.html" class="nav-link">ความทรงจำ</a>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <div class="header">
+            <h2>สมาชิก ม.3/3 รุ่น 46 SMT-R</h2>
+            <p>สมาชิกทั้งหมด 36 คน</p>
+            <br>
+            <p>สามารถกดที่ไอคอนของ IG , Facebook ของแต่ละคนเพื่อไปยังหน้าโปรไฟล์ได้</p>
+        </div>
+        
+        <div class="grid-box">
+            
+            <!-- คนที่ 01 -->
+            <div class="card">
+                <div class="img-box">
+                    <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1500039116337975406/inbound6512542497747625517_-_01..._.jpg?ex=69f6fbca&is=69f5aa4a&hm=5d72b2fd9b517dd5859ccc86cf5ef6735ea8bc29eecc3241df916000e7a9bdc8&" alt="รูปเพื่อน" class="img">
+                    <div class="info">
+                        <h3 class="name">กชธนาณัฐ ชาญชัยผล</h3>
+                        <p class="nick-num">ชื่อเล่น : ต้นกล้า  เลขที่ 01</p>
+                    </div>
+                </div>
+                <div class="social">
+                    <a href="https://www.facebook.com/share/1FX5ShppeL/" class="s-btn fb"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></span><span class="s-name">Kochthananat chanchaipol</span></a>
+                    <a href="https://www.instagram.com/tonkla_5.8y?igsh=MWU4dWRueWw5M2Q1eQ==" class="s-btn ig"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></span><span class="s-name">@tonkla_5.8y</span></a>
+                </div>
+            </div>
+
+            <!-- คนที่ 02 -->
+            <div class="card">
+                <div class="img-box">
+                    <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1500039116035854336/1768630004701_-_02..._.jpg?ex=69f6fbca&is=69f5aa4a&hm=46494e58d03c112a93a17a90844817169167284be02648e145d9239dbb9f7960&" alt="รูปเพื่อน" class="img">
+                    <div class="info">
+                        <h3 class="name">กสิกร สุวิชา</h3>
+                        <p class="nick-num">ชื่อเล่น : เกรซ  เลขที่ 02</p>
+                    </div>
+                </div>
+                <div class="social">
+                    <a href="https://www.facebook.com/share/1B6TUvKcwF/" class="s-btn fb"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></span><span class="s-name">Kasikron Sunaree Nantasan</span></a>
+                    <a href="https://www.instagram.com/kasikorn2555?igsh=MmZ2Z3VnMTRsZXoy " class="s-btn ig"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></span><span class="s-name">@kasikorn2555</span></a>
+                </div>
+            </div>
+
+            <!-- คนที่ 03 -->
+            <div class="card">
+                <div class="img-box">
+                    <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1507990298976981214/K9lsyUpJbAAAAAASUVORK5CYII.png?ex=6a13e8e8&is=6a129768&hm=b3b58c56aff1ecd776e829c22a4eba9c539c97ebaf6707be0d6ee0368ed51e24&" alt="รูปเพื่อน" class="img">
+                    <div class="info">
+                        <h3 class="name">กันตพัฒน์ รัตนเพชร</h3>
+                        <p class="nick-num">ชื่อเล่น : กันต์  เลขที่ 03</p>
+                    </div>
+                </div>
+                <div class="social">
+                    <a href="#" class="s-btn fb"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></span><span class="s-name">ไม่ทราบข้อมูล</span></a>
+                    <a href="#" class="s-btn ig"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></span><span class="s-name">ไม่ทราบข้อมูล</span></a>
+                </div>
+            </div>
+
+            <!-- คนที่ 04 -->
+            <div class="card">
+                <div class="img-box">
+                    <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1500039115826008124/1769261816196_-_04..._.jpg?ex=69f6fbca&is=69f5aa4a&hm=916ddb1d47a70aa65bdcca4d1ee36d5f059e657c78634f188b0acf682c2cb417&" alt="รูปเพื่อน" class="img">
+                    <div class="info">
+                        <h3 class="name">จิรชาติ อมรสรนาถ</h3>
+                        <p class="nick-num">ชื่อเล่น : ฟ้าลั่น  เลขที่ 04</p>
+                    </div>
+                </div>
+                <div class="social">
+                    <a href="#" class="s-btn fb"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></span><span class="s-name">ถูกลบออกโดยมิทราบสาเหตุ</span></a>
+                    <a href="https://www.instagram.com/numtui_67/" class="s-btn ig"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></span><span class="s-name">@numtui_67</span></a>
+                </div>
+            </div>
+
+            <!-- คนที่ 05 -->
+            <div class="card">
+                <div class="img-box">
+                    <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1507990298976981214/K9lsyUpJbAAAAAASUVORK5CYII.png?ex=6a13e8e8&is=6a129768&hm=b3b58c56aff1ecd776e829c22a4eba9c539c97ebaf6707be0d6ee0368ed51e24&" alt="รูปเพื่อน" class="img">
+                    <div class="info">
+                        <h3 class="name">ชยากร เจริญรัตน์</h3>
+                        <p class="nick-num">ชื่อเล่น : ภึม  เลขที่ 05</p>
+                    </div>
+                </div>
+                <div class="social">
+                    <a href="#" class="s-btn fb"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></span><span class="s-name">ไม่ทราบข้อมูล</span></a>
+                    <a href="#" class="s-btn ig"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></span><span class="s-name">ไม่ทราบข้อมูล</span></a>
+                </div>
+            </div>
+
+            <!-- คนที่ 06 -->
+            <div class="card">
+                <div class="img-box">
+                    <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1500039115545251931/IMG_3935_-_06..._.jpeg?ex=69f6fbca&is=69f5aa4a&hm=87b05bc193293b63659d5308d421b3b48bb4c4b56679a7ac1ef8836e8eac4095&" alt="รูปเพื่อน" class="img">
+                    <div class="info">
+                        <h3 class="name">ฑีทายุ โพธิ์คำ</h3>
+                        <p class="nick-num">ชื่อเล่น : นาวิน  เลขที่ 06</p>
+                    </div>
+                </div>
+                <div class="social">
+                    <a href="https://www.facebook.com/share/1CS7peY6ir/" class="s-btn fb"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></span><span class="s-name">Teethayu Phokham</span></a>
+                    <a href="https://www.instagram.com/n.teethayu?igsh=djNrcTl5cWkyenF6" class="s-btn ig"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></span><span class="s-name">@n.teethayu</span></a>
+                </div>
+            </div>
+            
+            <!-- คนที่ 07 -->
+            <div class="card">
+                <div class="img-box">
+                    <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1500065149896228964/IMG_20260502_162307_735.jpg?ex=69f71409&is=69f5c289&hm=4b6f3211fe334145dd35adc1bf211c718858f2d22a6a258b89ea6f9e855c947a&" alt="รูปเพื่อน" class="img">
+                    <div class="info">
+                        <h3 class="name">ธนกร อินโกสุม</h3>
+                        <p class="nick-num">ชื่อเล่น : มาร์ค  เลขที่ 07</p>
+                    </div>
+                </div>
+                <div class="social">
+                    <a href="https://www.facebook.com/mark.mark.50324" class="s-btn fb"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></span><span class="s-name">Mark Mark</span></a>
+                    <a href="https://www.instagram.com/tk_marzz?igsh=MXN3NmQyNHIyYjNwNQ==" class="s-btn ig"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></span><span class="s-name">@tk_marzz</span></a>
+                </div>
+            </div>
+
+            <!-- คนที่ 08 -->
+            <div class="card">
+                <div class="img-box">
+                    <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1500495119374225448/1736841644258.jpg?ex=69f8a47a&is=69f752fa&hm=0a6957aff8090f8fad1b4b5997aa5cfb8a79bbfd66ad2ac0b2d8a20614cf445a&" alt="รูปเพื่อน" class="img">
+                    <div class="info">
+                        <h3 class="name">ธนวัฒน์ ปรากฏหาญ</h3>
+                        <p class="nick-num">ชื่อเล่น : เฉิน  เลขที่ 08</p>
+                    </div>
+                </div>
+                <div class="social">
+                    <a href="https://www.facebook.com/thanawat.pragothan" class="s-btn fb"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></span><span class="s-name">Tanawat Pragothan</span></a>
+                    <a href="https://www.instagram.com/thanawatpragothan/" class="s-btn ig"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></span><span class="s-name">@thanawatpragothan</span></a>
+                </div>
+            </div>
+
+            <!-- คนที่ 09 -->
+            <div class="card">
+                <div class="img-box">
+                    <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1500039032048979999/1768826047347_-_09..._.jpg?ex=69f6fbb6&is=69f5aa36&hm=83af035ffa7cb72d0bdcb37854f7c2a5175be0304c832eeda9d05b2077408fb1&" alt="รูปเพื่อน" class="img">
+                    <div class="info">
+                        <h3 class="name">ธนิก คำสุรินทร์</h3>
+                        <p class="nick-num">ชื่อเล่น : แชมป์  เลขที่ 09</p>
+                    </div>
+                </div>
+                <div class="social">
+                    <a href="https://www.facebook.com/ch.mp.kha.surinthr" class="s-btn fb"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></span><span class="s-name">แชมป์ คำสุรินทร์</span></a>
+                    <a href="https://www.instagram.com/aechmpkhamsurinthr?igsh=MXVpaGd4d2xna2hndA==" class="s-btn ig"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></span><span class="s-name">@aechmpkhamsurinthr</span></a>
+                </div>
+            </div>
+
+            <!-- คนที่ 10 -->
+            <div class="card">
+                <div class="img-box">
+                    <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1500039031793385592/Screenshot_2026-01-19-19-42-58-76_99c04817c0de5652397fc8b56c3b3817_-_10..._.jpg?ex=69f6fbb6&is=69f5aa36&hm=30c67d12f8647c1bd19d3ffeac409ce57fc52b61a32dbd000bff7cf2ad342563&" alt="รูปเพื่อน" class="img">
+                    <div class="info">
+                        <h3 class="name">นพรุจ แสงคูณ</h3>
+                        <p class="nick-num">ชื่อเล่น : แม็ก  เลขที่ 10</p>
+                    </div>
+                </div>
+                <div class="social">
+                    <a href="#" class="s-btn fb"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></span><span class="s-name">ไม่ทราบข้อมูล</span></a>
+                    <a href="#" class="s-btn ig"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></span><span class="s-name">ไม่ทราบข้อมูล</span></a>
+                </div>
+            </div>
+
+            <!-- คนที่ 11 -->
+            <div class="card">
+                <div class="img-box">
+                    <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1500039031289810954/IMG_20260120_194203_-_11..._.jpg?ex=69f6fbb6&is=69f5aa36&hm=21f6d9b60f7526bb38575ab15558a4395e739f14d8a0db733e7b0820c8c95c46&" alt="รูปเพื่อน" class="img">
+                    <div class="info">
+                        <h3 class="name">ปริญธร เดชดอน</h3>
+                        <p class="nick-num">ชื่อเล่น : พู่กัน  เลขที่ 11</p>
+                    </div>
+                </div>
+                <div class="social">
+                    <a href="https://www.facebook.com/share/17WJrRQ1Rr/" class="s-btn fb"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></span><span class="s-name">พู่กัน คับ</span></a>
+                    <a href="https://www.instagram.com/jujan_1027?igsh=cWZwaTIxMjlmZnFs" class="s-btn ig"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></span><span class="s-name">@jujan_1027</span></a>
+                </div>
+            </div>
+
+            <!-- คนที่ 12 -->
+            <div class="card">
+                <div class="img-box">
+                    <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1500495119005122654/1737181507290.jpg?ex=69f8a47a&is=69f752fa&hm=bd9e6b4a9dd275efd4fd60169226c5bfb063f22e54f5cbf43deb45738cc9b454&" alt="รูปเพื่อน" class="img">
+                    <div class="info">
+                        <h3 class="name">พีรวิชญ์ นามจำลอง</h3>
+                        <p class="nick-num">ชื่อเล่น : พี  เลขที่ 12</p>
+                    </div>
+                </div>
+                <div class="social">
+                    <a href="https://www.facebook.com/share/1Hp2Wha4fJ/" class="s-btn fb"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></span><span class="s-name">พีรวิชญ์ นามจำลอง</span></a>
+                    <a href="https://www.instagram.com/pphhii.1234?igsh=MTc4aDBkems0bWhvdQ==" class="s-btn ig"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></span><span class="s-name">@pphhii.1234</span></a>
+                </div>
+            </div>
+
+            <!-- คนที่ 13 -->
+            <div class="card">
+                <div class="img-box">
+                    <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1500039026860621955/20260203_183356_-_13..._.jpg?ex=69f6fbb5&is=69f5aa35&hm=1ca37e7845b149af35eca65f50b7b64a2fc3bfc5954173dd2fa4d46de45c094e&" alt="รูปเพื่อน" class="img">
+                    <div class="info">
+                        <h3 class="name">ภคภัทร พวงไธสง</h3>
+                        <p class="nick-num">ชื่อเล่น : ตองเก้า  เลขที่ 13</p>
+                    </div>
+                </div>
+                <div class="social">
+                    <a href="https://www.facebook.com/share/15mJ8eLTrF6/" class="s-btn fb"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></span><span class="s-name">Phakaphat Puangthaisong</span></a>
+                    <a href="https://www.instagram.com/tongkaw_999?igsh=am5jbXhic3ZucGx5" class="s-btn ig"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></span><span class="s-name">@tongkaw_999</span></a>
+                </div>
+            </div>
+
+            <!-- คนที่ 14 -->
+            <div class="card">
+                <div class="img-box">
+                    <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1507990298976981214/K9lsyUpJbAAAAAASUVORK5CYII.png?ex=6a13e8e8&is=6a129768&hm=b3b58c56aff1ecd776e829c22a4eba9c539c97ebaf6707be0d6ee0368ed51e24&" alt="รูปเพื่อน" class="img">
+                    <div class="info">
+                        <h3 class="name">ภูตะวัน เติมสายทอง</h3>
+                        <p class="nick-num">ชื่อเล่น : ออโต้  เลขที่ 14</p>
+                        <p class="nick-to">ยังไม่ยืนยันการลาออก</p>
+                    </div>
+                </div>
+                <div class="social">
+                    <a href="#" class="s-btn fb"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></span><span class="s-name">ไม่ทราบข้อมูล</span></a>
+                    <a href="#" class="s-btn ig"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></span><span class="s-name">ไม่ทราบข้อมูล</span></a>
+                </div>
+            </div>
+
+            <!-- คนที่ 15 -->
+            <div class="card">
+                <div class="img-box">
+                    <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1500039030430240860/IMG_20260119_191217_-_15..._.jpg?ex=69f6fbb6&is=69f5aa36&hm=853b180fb2cb31f1bdded54343c2a8bec296ccea7457e24093f32cb88cade634&" alt="รูปเพื่อน" class="img">
+                    <div class="info">
+                        <h3 class="name">รณพีร์ เสฏฐพงศ์พาณิช</h3>
+                        <p class="nick-num">ชื่อเล่น : เก็ท  เลขที่ 15</p>
+                    </div>
+                </div>
+                <div class="social">
+                    <a href="https://www.facebook.com/share/1AtDJihijU/" class="s-btn fb"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></span><span class="s-name">Ronnapi Settapongpanit</span></a>
+                    <a href="https://www.instagram.com/getloveslatte?igsh=YjJmbXljNHA2d2tp" class="s-btn ig"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></span><span class="s-name">@getloveslatte</span></a>
+                </div>
+            </div>
+
+            <!-- คนที่ 16 -->
+            <div class="card">
+                <div class="img-box">
+                    <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1500053437641920623/1777710998086.jpg?ex=69f70921&is=69f5b7a1&hm=1543ad3423372786dce2bf665a528db759b0bb3e04c9ca32c3d3ee63db920bb5" alt="รูปเพื่อน" class="img">
+                    <div class="info">
+                        <h3 class="name">วรกร เตชะวรวุฒิ</h3>
+                        <p class="nick-num">ชื่อเล่น : คอตต๊อน  เลขที่ 16</p>
+                    </div>
+                </div>
+                <div class="social">
+                    <a href="#" class="s-btn fb"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></span><span class="s-name">ไม่ทราบข้อมูล</span></a>
+                    <a href="https://www.instagram.com/cxt_.txn_?igsh=M2gzMjFxbWJxdzVo" class="s-btn ig"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></span><span class="s-name">@cxt_.txn_</span></a>
+                </div>
+            </div>
+
+            <!-- คนที่ 17 -->
+            <div class="card">
+                <div class="img-box">
+                    <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1507990298976981214/K9lsyUpJbAAAAAASUVORK5CYII.png?ex=6a13e8e8&is=6a129768&hm=b3b58c56aff1ecd776e829c22a4eba9c539c97ebaf6707be0d6ee0368ed51e24&" alt="รูปเพื่อน" class="img">
+                    <div class="info">
+                        <h3 class="name">วรวัฒน์ พรมขันธ์</h3>
+                        <p class="nick-num">ชื่อเล่น : แทน  เลขที่ 17</p>
+                    </div>
+                </div>
+                <div class="social">
+                    <a href="https://www.facebook.com/share/1Av9cDQAiw/" class="s-btn fb"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></span><span class="s-name">วรวัฒน์ พรมขันธ์</span></a>
+                    <a href="#" class="s-btn ig"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></span><span class="s-name">ไม่ทราบข้อมูล</span></a>
+                </div>
+            </div>
+
+            <!-- คนที่ 18 -->
+            <div class="card">
+                <div class="img-box">
+                    <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1500070112017911900/1777714962295.jpg?ex=69f718a8&is=69f5c728&hm=3fb46511ffc6feed4a8d6924eae85b6f133c19f85812080f352d5eed91ffefd0&" alt="รูปเพื่อน" class="img">
+                    <div class="info">
+                        <h3 class="name">วุฒิศักดิ์ เอกพิริยกุล</h3>
+                        <p class="nick-num">ชื่อเล่น : ต้าเทียน  เลขที่ 18</p>
+                    </div>
+                </div>
+                <div class="social">
+                    <a href="#" class="s-btn fb"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></span><span class="s-name">ไม่ทราบข้อมูล</span></a>
+                    <a href="#" class="s-btn ig"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></span><span class="s-name">ไม่ทราบข้อมูล</span></a>
+                </div>
+            </div>
+
+            <!-- คนที่ 19 -->
+            <div class="card">
+                <div class="img-box">
+                    <img src=https://cdn.discordapp.com/attachments/1499409643976392704/1507990298976981214/K9lsyUpJbAAAAAASUVORK5CYII.png?ex=6a13e8e8&is=6a129768&hm=b3b58c56aff1ecd776e829c22a4eba9c539c97ebaf6707be0d6ee0368ed51e24&" alt="รูปเพื่อน" class="img">
+                    <div class="info">
+                        <h3 class="name">สาธิน อุ่นใจดี</h3>
+                        <p class="nick-num">ชื่อเล่น : มิว  เลขที่ 19</p>
+                    </div>
+                </div>
+                <div class="social">
+                    <a href="#" class="s-btn fb"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></span><span class="s-name">ไม่ทราบข้อมูล</span></a>
+                    <a href="#" class="s-btn ig"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></span><span class="s-name">ไม่ทราบข้อมูล</span></a>
+                </div>
+            </div>
+
+            <!-- คนที่ 20 -->
+            <div class="card">
+                <div class="img-box">
+                    <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1500039659009609758/IMG20250821090146_-_20..._.jpg?ex=69f6fc4c&is=69f5aacc&hm=5e2dae59ede9894c57d50e6401a4bd5daaa610e547369aeba9aa68ed67b0f1d2&" alt="รูปเพื่อน" class="img">
+                    <div class="info">
+                        <h3 class="name">สิรภพ อาสนะนันทน์</h3>
+                        <p class="nick-num">ชื่อเล่น : เซน  เลขที่ 20</p>
+                    </div>
+                </div>
+                <div class="social">
+                    <a href="https://www.facebook.com/zenzen.sirapop" class="s-btn fb"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></span><span class="s-name">ZenZen Sirapop</span></a>
+                    <a href="#" class="s-btn ig"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></span><span class="s-name">ไม่ทราบข้อมูล</span></a>
+                </div>
+            </div>
+
+            <!-- คนที่ 21 -->
+            <div class="card">
+                <div class="img-box">
+                    <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1500039659248422922/IMG_0863_-_21..._.jpeg?ex=69f6fc4c&is=69f5aacc&hm=d55094dbe4bb549e991dd9d8fe61cd81e55147979a23f3a6c665302bbdf5ec0a&" alt="รูปเพื่อน" class="img">
+                    <div class="info">
+                        <h3 class="name">สิรวิชญ์ โตแท้</h3>
+                        <p class="nick-num">ชื่อเล่น : ภึม  เลขที่ 21</p>
+                    </div>
+                </div>
+                <div class="social">
+                    <a href="https://www.facebook.com/peem.sirawit" class="s-btn fb"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></span><span class="s-name">Peem Sirawit</span></a>
+                    <a href="https://www.instagram.com/xererzis._?igsh=MWhpYm9lemxjbnJhcA==" class="s-btn ig"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></span><span class="s-name">@xererzis._</span></a>
+                </div>
+            </div>
+
+            <!-- คนที่ 22 -->
+            <div class="card">
+                <div class="img-box">
+                    <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1500039658661220432/WIN_20260206_19_45_05_Pro_-_22..._.jpg?ex=69f6fc4c&is=69f5aacc&hm=e31cba315a151b3228db91594ab903ae18fd1bbe4909ac5aea2117e68501f7b5&" alt="รูปเพื่อน" class="img">
+                    <div class="info">
+                        <h3 class="name">เอื้ออังกูร แก้วเรือง</h3>
+                        <p class="nick-num">ชื่อเล่น : อังกูร  เลขที่ 22</p>
+                    </div>
+                </div>
+                <div class="social">
+                    <a href="https://www.facebook.com/auaungkun.aunkun" class="s-btn fb"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></span><span class="s-name">BakAngkoon Kaewruang</span></a>
+                    <a href="https://www.instagram.com/a7_nwx?igsh=dGxybno2MjFtODkx" class="s-btn ig"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></span><span class="s-name">@a7_nwx</span></a>
+                </div>
+            </div>
+
+            <!-- คนที่ 23 -->
+            <div class="card">
+                <div class="img-box">
+                    <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1500051476922503279/Screenshot_20260502_152847_Discord.jpg?ex=69f7074d&is=69f5b5cd&hm=ad0147798127215630d67a0eb0066c55153e99f2132d116f9fc744310fef7d66" alt="รูปเพื่อน" class="img">
+                    <div class="info">
+                        <h3 class="name">เอื้ออังกูร ใจมั่น</h3>
+                        <p class="nick-num">ชื่อเล่น : เป้  เลขที่ 23</p>
+                    </div>
+                </div>
+                <div class="social">
+                    <a href="https://www.facebook.com/pae.xi.2025" class="s-btn fb"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></span><span class="s-name">PaelnwZa Kuki</span></a>
+                    <a href="https://www.instagram.com/p.pae_2333?igsh=MXY1cWpsc2t2dTJxMQ==" class="s-btn ig"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></span><span class="s-name">@p.pae_2333</span></a>
+                </div>
+            </div>
+
+            <!-- คนที่ 24 -->
+            <div class="card">
+                <div class="img-box">
+                    <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1500048186885148722/1777709746441.jpg?ex=69f7043d&is=69f5b2bd&hm=1d8af04b27bd345d98a2d18631365dda47e27d799ea5a72b1885cfd59a78696f" alt="รูปเพื่อน" class="img">
+                    <div class="info">
+                        <h3 class="name">ชญาณิน ทองเลี่ยมรัตน์</h3>
+                        <p class="nick-num">ชื่อเล่น : ปีญ่า  เลขที่ 24</p>
+                    </div>
+                </div>
+                <div class="social">
+                    <a href="https://www.facebook.com/share/17maCW39K4/" class="s-btn fb"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></span><span class="s-name">Pie Xus</span></a>
+                    <a href="https://www.instagram.com/plexuszi?igsh=MWF6NGNmdWhtbTFtNg==" class="s-btn ig"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></span><span class="s-name">@plexuszi</span></a>
+                </div>
+            </div>
+
+            <!-- คนที่ 25 -->
+            <div class="card">
+                <div class="img-box">
+                    <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1500054108143489024/Screenshot_20260502_153919_Discord.jpg?ex=69f709c1&is=69f5b841&hm=837d841f1763c4daef90ef79fa37661fed61ebb66d6e7f1177de9ebf8bbd0a5c" alt="รูปเพื่อน" class="img">
+                    <div class="info">
+                        <h3 class="name">ฑิตยา ณ นคร</h3>
+                        <p class="nick-num">ชื่อเล่น : ฟ้าใส  เลขที่ 25</p>
+                    </div>
+                </div>
+                <div class="social">
+                    <a href="https://www.facebook.com/share/18HwLAVcUg/" class="s-btn fb"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></span><span class="s-name">Zxl Xqt</span></a>
+                    <a href="https://www.instagram.com/xcu_wer?igsh=MTEzcWY2N2FjejR5Yg==" class="s-btn ig"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></span><span class="s-name">@xcu_wer</span></a>
+                </div>
+            </div>
+
+            <!-- คนที่ 26 -->
+            <div class="card">
+                <div class="img-box">
+                    <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1500039029729792050/IMG_20251230_101905_-_26..._.jpg?ex=69f6fbb6&is=69f5aa36&hm=ea46337ee322bfbca0841717e2b0ff94c8cf8c3c7fe097940eb07e4406623082&" alt="รูปเพื่อน" class="img">
+                    <div class="info">
+                        <h3 class="name">ณัฐพัชญ์ อัครธรรมสุทธิ</h3>
+                        <p class="nick-num">ชื่อเล่น : แฟรี่  เลขที่ 26</p>
+                    </div>
+                </div>
+                <div class="social">
+                    <a href="https://www.facebook.com/share/14fA3NA96nV/" class="s-btn fb"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></span><span class="s-name">Coffee San</span></a>
+                    <a href="https://www.instagram.com/natthapat_.fairyya?igsh=MTc2anluZHk2b3cyYg==" class="s-btn ig"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></span><span class="s-name">@natthapat_.fairyya</span></a>
+                </div>
+            </div>
+
+            <!-- คนที่ 27 -->
+            <div class="card">
+                <div class="img-box">
+                    <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1500379921179218040/1777788820334.jpg?ex=69f83930&is=69f6e7b0&hm=7d0c8e7997c82dfd06e892b254ce2d406753c34eef1aab32c67963e1626f25c2&" alt="รูปเพื่อน" class="img">
+                    <div class="info">
+                        <h3 class="name">ธันยพัต เจนนาภาวงศ์</h3>
+                        <p class="nick-num">ชื่อเล่น : ฟ้าแอล  เลขที่ 27</p>
+                    </div>
+                </div>
+                <div class="social">
+                    <a href="#" class="s-btn fb"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></span><span class="s-name">ไม่ทราบข้อมูล</span></a>
+                    <a href="#" class="s-btn ig"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></span><span class="s-name">ไม่ทราบข้อมูล</span></a>
+                </div>
+            </div>
+
+            <!-- คนที่ 28 -->
+            <div class="card">
+                <div class="img-box">
+                    <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1500039029029212171/IMG_4386_-_28..._.jpeg?ex=69f6fbb5&is=69f5aa35&hm=81b3e8a1f940ce16443af03169b144fcf7ec88b9d9760f4b3903f951547b95af&" alt="รูปเพื่อน" class="img">
+                    <div class="info">
+                        <h3 class="name">นันท์อนัดดา อินทรีปราณีกูล</h3>
+                        <p class="nick-num">ชื่อเล่น : เนซ  เลขที่ 28</p>
+                    </div>
+                </div>
+                <div class="social">
+                    <a href="https://www.facebook.com/share/18dNmURz6K/" class="s-btn fb"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></span><span class="s-name">เนซ เนซ</span></a>
+                    <a href="https://www.instagram.com/n_nacez?igsh=cmQ4NGU2cWt2ejk4" class="s-btn ig"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></span><span class="s-name">@n_nacez</span></a>
+                </div>
+            </div>
+
+            <!-- คนที่ 29 -->
+            <div class="card">
+                <div class="img-box">
+                    <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1500040292538257470/1777636326355.jpg?ex=69f6fce3&is=69f5ab63&hm=46861c361f886f3f7bc6db1b0341f76d7df3cdae7f078d912d45470ca4ae599c" alt="รูปเพื่อน" class="img">
+                    <div class="info">
+                        <h3 class="name">นิสรีน มุสิกะพันธุ์</h3>
+                        <p class="nick-num">ชื่อเล่น : เลนก้า  เลขที่ 29</p>
+                    </div>
+                </div>
+                <div class="social">
+                    <a href="https://www.facebook.com/share/1BJgptvN4K/" class="s-btn fb"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></span><span class="s-name">เลนกา ก่าก้า</span></a>
+                    <a href="https://www.instagram.com/l_uxckz?igsh=cHJ0cGkzZ2VqdGY2" class="s-btn ig"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></span><span class="s-name">@l_uxckz</span></a>
+                </div>
+            </div>
+
+            <!-- คนที่ 30 -->
+            <div class="card">
+                <div class="img-box">
+                    <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1500039028777681078/b006d212481d09abf6eb7123a194178f_0_-_30..._.jpeg?ex=69f6fbb5&is=69f5aa35&hm=1221a6d79fcf2a642fa07dde849620575f9f6947f3e7cbf2507924a780df0eed&" alt="รูปเพื่อน" class="img">
+                    <div class="info">
+                        <h3 class="name">บุณยานุช ดอนโค</h3>
+                        <p class="nick-num">ชื่อเล่น : เอ๋ย  เลขที่ 30</p>
+                    </div>
+                </div>
+                <div class="social">
+                    <a href="#" class="s-btn fb"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></span><span class="s-name">ไม่ทราบข้อมูล</span></a>
+                    <a href="https://www.instagram.com/y.a__ee?igsh=MXViMXg0MnMyOW96Mw==" class="s-btn ig"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></span><span class="s-name">y.a_ee</span></a>
+                </div>
+            </div>
+
+            <!-- คนที่ 31 -->
+            <div class="card">
+                <div class="img-box">
+                    <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1500051929412276364/IMG_20260502_153042_155.jpg?ex=69f707b9&is=69f5b639&hm=7642416d18563ac893b3e95dee3428da81a3b5aee4893fbf3d2b287467b30f2b" alt="รูปเพื่อน" class="img">
+                    <div class="info">
+                        <h3 class="name">เบญญาภา หามนตรี</h3>
+                        <p class="nick-num">ชื่อเล่น : เบล  เลขที่ 31</p>
+                    </div>
+                </div>
+                <div class="social">
+                    <a href="https://www.facebook.com/share/18V2nzT2P7/" class="s-btn fb"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></span><span class="s-name">Belle Hamontree</span></a>
+                    <a href="https://www.instagram.com/bb_bxll_?igsh=ZnZtOWc2ang1NG1w" class="s-btn ig"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></span><span class="s-name">@bb_bxll_</span></a>
+                </div>
+            </div>
+
+            <!-- คนที่ 32 -->
+            <div class="card">
+                <div class="img-box">
+                    <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1500039028563644446/IMG_5292_-_32..._.jpeg?ex=69f6fbb5&is=69f5aa35&hm=3c2375919883740ccf7d883aeb201621b6a48a6e382f34da67e14affd6173b27&" alt="รูปเพื่อน" class="img">
+                    <div class="info">
+                        <h3 class="name">ปนัดดา สุวงศ์</h3>
+                        <p class="nick-num">ชื่อเล่น : หนูดี  เลขที่ 32</p>
+                    </div>
+                </div>
+                <div class="social">
+                    <a href="https://www.facebook.com/share/1LPj9CMhrp/" class="s-btn fb"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></span><span class="s-name">Panadda Suwong</span></a>
+                    <a href="https://www.instagram.com/i.panudd?igsh=MXM1NmZrdnpjdXc1OQ==" class="s-btn ig"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></span><span class="s-name">i.panudd</span></a>
+                </div>
+            </div>
+
+            <!-- คนที่ 33 -->
+            <div class="card">
+                <div class="img-box">
+                    <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1500039028005929041/IMG20260127183403_-_33..._.jpg?ex=6a1353f5&is=6a120275&hm=11a83d8af9d06501d874bbc42834b2638acb95edd3a28ca3d09eed6fe767c656&" alt="รูปเพื่อน" class="img">
+                    <div class="info">
+                        <h3 class="name">พิชชานันท์ สมยศ</h3>
+                        <p class="nick-num">ชื่อเล่น : น้ำเหนือ  เลขที่ 33</p>
+                    </div>
+                </div>
+                <div class="social">
+                    <a href="https://www.facebook.com/share/1Fiex1qpbd/" class="s-btn fb"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></span><span class="s-name">ナムヌアー</span></a>
+                    <a href="https://www.instagram.com/pn._namnuea?igsh=YzBmYnM1M2NmN2to" class="s-btn ig"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></span><span class="s-name">@pn._namnuea</span></a>
+                </div>
+            </div>
+
+            <!-- คนที่ 34 -->
+            <div class="card">
+                <div class="img-box">
+                    <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1500050402538815559/IMG_20260502_152432_788.jpg?ex=6a135e8d&is=6a120d0d&hm=004a4bf101d0c9e1e388ebf04b74b117def1899157191f7243e58e69bdc09d63&" alt="รูปเพื่อน" class="img">
+                    <div class="info">
+                        <h3 class="name">รมณ วิสัยหมั่น</h3>
+                        <p class="nick-num">ชื่อเล่น : อัย  เลขที่ 34</p>
+                    </div>
+                </div>
+                <div class="social">
+                    <a href="https://www.facebook.com/share/1CRMxLQaRd/" class="s-btn fb"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></span><span class="s-name">Rramn Ax</span></a>
+                    <a href="https://www.instagram.com/x._aaxi?igsh=bDUzdXI3bGEzdXQ5" class="s-btn ig"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></span><span class="s-name">@x._aaxi</span></a>
+                </div>
+            </div>
+
+            <!-- คนที่ 35 -->
+            <div class="card">
+                <div class="img-box">
+                    <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1500059971730145361/IMG_20260502_160226_405.jpg?ex=6a136777&is=6a1215f7&hm=9166b2d5b9d6639a7c9e2849b93a4b0ddaf1bb656c4fb365915ad1a1383490b8&" alt="รูปเพื่อน" class="img">
+                    <div class="info">
+                        <h3 class="name">สุมินตรา แก้ววิชิต</h3>
+                        <p class="nick-num">ชื่อเล่น : พอใจ  เลขที่ 35</p>
+                    </div>
+                </div>
+                <div class="social">
+                    <a href="https://www.facebook.com/share/1aoc7x5eRi/" class="s-btn fb"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></span><span class="s-name">Sumintra Kaewichit</span></a>
+                    <a href="https://www.instagram.com/artnimus_9?igsh=d21sdm0zejFydHR0" class="s-btn ig"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></span><span class="s-name">@artnimus_9</span></a>
+                </div>
+            </div>
+
+            <!-- คนที่ 36 -->
+            <div class="card">
+                <div class="img-box">
+                    <img src="https://cdn.discordapp.com/attachments/1499409643976392704/1500064886145683536/IMG_20260502_162203_091.jpg?ex=6a136c0a&is=6a121a8a&hm=2df4a28a479274b8042b3a9feaf5de5aa29c21ad52c3d5d542337a4e88014773&" alt="รูปเพื่อน" class="img">
+                    <div class="info">
+                        <h3 class="name">อภิชญา แดงสกุล</h3>
+                        <p class="nick-num">ชื่อเล่น : ออกัส  เลขที่ 36</p>
+                    </div>
+                </div>
+                <div class="social">
+                    <a href="https://www.facebook.com/share/1EeyNX2DVL/" class="s-btn fb"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></span><span class="s-name">August Gust</span></a>
+                    <a href="https://www.instagram.com/agxus_xt?igsh=MTBvd2dkNmc3MDg0ag==" class="s-btn ig"><span class="s-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></span><span class="s-name">@agxus_xt</span></a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- ฟุตเตอร์ของห้อง (สีน้ำเงินดำ มีเงาขึ้นด้านบน) -->
+    <footer>
+        <div class="footer-box">
+            <p>ติดตามความเคลื่อนไหวและภาพกิจกรรมของพวกเราได้ที่</p>
+            <a href="https://www.instagram.com/smt_robot3.3?igsh=MTd0OWd5OTZza3B4bA==" target="_blank" class="ig-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                IG: @smt_robot3.3
+            </a>
+            <!-- เรียกใช้คลาส footer-copyright จาก CSS แทนการใส่ Style โดยตรง -->
+            <p class="footer-copyright">©ม.3/3 รุ่น 46 SMT-R | RST💚💛</p>
+        </div>
+    </footer>
+
+</body>
+</html>
